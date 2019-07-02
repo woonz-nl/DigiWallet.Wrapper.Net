@@ -6,6 +6,9 @@ namespace DigiWalletAPIWrapper.Extensions
 {
     public static class IServiceCollectionExtension
     {
+        /// <summary>
+        /// Adds the services required for the DigiWalletAPI library to function. For now, this is just a HTTPClient
+        /// </summary>
         public static IServiceCollection AddDigiWalletServices(this IServiceCollection services)
         {
             services.AddSingleton<IIDealIssuerRepository, IDealIssuerRepository>();
