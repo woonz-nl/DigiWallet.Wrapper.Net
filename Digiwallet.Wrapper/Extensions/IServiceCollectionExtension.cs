@@ -1,8 +1,8 @@
-﻿using DigiWalletAPIWrapper.Repositories;
-using DigiWalletAPIWrapper.Repositories.Interfaces;
+﻿using Digiwallet.Wrapper.Repositories;
+using Digiwallet.Wrapper.Repositories.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DigiWalletAPIWrapper.Extensions
+namespace Digiwallet.Wrapper.Extensions
 {
     public static class IServiceCollectionExtension
     {

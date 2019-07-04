@@ -1,10 +1,8 @@
-﻿using DigiWalletAPIWrapper.Models.iDeal;
-using System;
+﻿using Digiwallet.Wrapper.Models.iDeal;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace DigiWalletAPIWrapper.Repositories.Interfaces
+namespace Digiwallet.Wrapper.Repositories.Interfaces
 {
     /// <summary>
     /// Interface that defines a repository that can return a list of iDeal issuers. 

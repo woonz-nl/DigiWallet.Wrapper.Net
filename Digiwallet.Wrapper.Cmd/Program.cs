@@ -1,10 +1,10 @@
-﻿using DigiWalletAPIWrapper.Extensions;
-using DigiWalletAPIWrapper.Repositories;
-using DigiWalletAPIWrapper.Repositories.Interfaces;
+﻿using Digiwallet.Wrapper.Extensions;
+using Digiwallet.Wrapper.Repositories;
+using Digiwallet.Wrapper.Repositories.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace DigiWalletAPIConsole
+namespace Digiwallet.Wrapper.Cmd
 {
     class Program
     {

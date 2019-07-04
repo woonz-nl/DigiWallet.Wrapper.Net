@@ -1,11 +1,11 @@
-﻿using DigiWalletAPIWrapper.Models.iDeal;
-using DigiWalletAPIWrapper.Repositories.Interfaces;
+﻿using Digiwallet.Wrapper.Models.iDeal;
+using Digiwallet.Wrapper.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace DigiWalletAPIWrapper.Repositories
+namespace Digiwallet.Wrapper.Repositories
 {
     /// <summary>
     /// Implementation of the issuer repository. 
