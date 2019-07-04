@@ -20,6 +20,11 @@ namespace Digiwallet.Wrapper.Repositories
             _clientFactory = clientFactory;
         }
 
+        /// <summary>
+        /// Method returns iDeal issuers as supported by Digiwallet. 
+        /// Issuers are fetched every time the function is called. May be changed to a cached value later on. 
+        /// </summary>
+        /// <returns>List of issuers</returns>
         public async Task<IEnumerable<IDealIssuerModel>> GetIssuers()
         {
             // TODO: Use a URI builder instead

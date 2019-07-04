@@ -1,3 +1,11 @@
+
+# Project specifics
+
+appsettings.json # Copy from .example. 
+
+
+# Generic
+
 *.swp
 *.*~
 project.lock.json

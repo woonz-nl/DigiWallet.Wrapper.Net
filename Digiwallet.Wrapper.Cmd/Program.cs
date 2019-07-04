@@ -1,8 +1,13 @@
 ﻿using Digiwallet.Wrapper.Extensions;
 using Digiwallet.Wrapper.Repositories;
 using Digiwallet.Wrapper.Repositories.Interfaces;
+using Digiwallet.Wrapper.Services;
+using Digiwallet.Wrapper.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Digiwallet.Wrapper.Cmd
 {
@@ -10,19 +15,63 @@ namespace Digiwallet.Wrapper.Cmd
     {
         public static void Main(string[] args)
         {
-            var serviceProvider = new ServiceCollection()
-                .AddSingleton<IIDealIssuerRepository, IDealIssuerRepository>()
-                .AddDigiWalletServices()
-                .BuildServiceProvider();
+            AsyncMain().Wait();
+        }
+
+        public static async Task AsyncMain()
+        {
+            var configuration = GetConfigurationBuilder();
+            var serviceProvider = GetServiceProvider(configuration);
 
             var issuerRepo = serviceProvider.GetService<IIDealIssuerRepository>();
+            var iDealTransactionService = serviceProvider.GetService<IIDealTransactionService>();
 
-            var issuers = issuerRepo.GetIssuers().GetAwaiter().GetResult();
+            var issuers = await issuerRepo.GetIssuers();
 
             foreach (var issuer in issuers)
             {
                 Console.WriteLine(string.Format("ID: {0}, Name: {1}", issuer.Id, issuer.BankName));
             }
+
+            var result = await iDealTransactionService.StartTransaction(new Models.Transaction.IDealTransaction()
+            {
+                Amount = 2000,
+                Bank = "ABNAL2A",
+                Description = "Testing 1. 2.",
+                CancelUrl = "http://development.woonz.nl/DigiWallet/cancel",
+                ReturnUrl = "http://development.woonz.nl/DigiWallet/return",
+                ReportUrl = "http://development.woonz.nl/DigiWallet/report"
+            });
+
+            Console.WriteLine(string.Format("== Transaction response ===\nStatuscode: {0}\nStatus enum: {1}\nResponse body {2}", result.StatusCode, result.Status, result.ResponseBody));
+        }
+
+        public static IConfigurationRoot GetConfigurationBuilder()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                // Currently not used, but can hold the Digiwallet settings 'salt' and 'api key'. 
+                // Those params aren't used in Api v3.
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            IConfigurationRoot configuration = builder.Build();
+            return configuration;
+        }
+
+        public static ServiceProvider GetServiceProvider(IConfigurationRoot configuration)
+        {
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton<IIDealIssuerRepository, IDealIssuerRepository>()
+                .AddDigiWalletServices()
+                .AddOptions()
+                .AddSingleton<IIDealTransactionService, IDealTransactionService>()
+                // Maps the Digiwallet config options to the settings model, and adds it for injection. 
+                // Since none of the settings are currently in use, this has been commented out.
+                //.Configure<DigiwalletSettings>(options => {
+                //    configuration.Bind("Digiwallet", options);
+                //})
+                .BuildServiceProvider();
+            return serviceProvider;
         }
     }
 }
