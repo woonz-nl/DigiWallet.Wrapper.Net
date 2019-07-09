@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Digiwallet.Wrapper.Models.Responses
 {
@@ -37,8 +38,14 @@ namespace Digiwallet.Wrapper.Models.Responses
 
             this.StatusCode = splitStatus[0];
             this.Status = this.ResponseFromString(splitStatus[0]);
-            this.TransactionNr = Int32.Parse(splitStatus[1]);
-            this.ResponseBody = splitResponse[1];
+            if (this.Status == StartTransactionResponseCodes.Started)
+            {
+                this.TransactionNr = Int32.Parse(splitStatus[1]);
+            }
+            else
+            {
+                this.ResponseBody = string.Join(" ", splitStatus.Skip(1));
+            }
         }
 
         private StartTransactionResponseCodes ResponseFromString(string responseCode)
