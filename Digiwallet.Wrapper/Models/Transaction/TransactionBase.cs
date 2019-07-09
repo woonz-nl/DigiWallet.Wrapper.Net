@@ -5,7 +5,7 @@ namespace Digiwallet.Wrapper.Models.Transaction
     {
         #region Generic API params
         public int Version { get; } = 4;
-        public string TransactionId { get; set; }
+        public int ShopID { get; set; }
         public bool Test { get; set; }
         #endregion
 

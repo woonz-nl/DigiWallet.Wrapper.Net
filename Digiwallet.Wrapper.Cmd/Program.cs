@@ -39,6 +39,7 @@ namespace Digiwallet.Wrapper.Cmd
 
             var result = await iDealTransactionService.StartTransaction(new Models.Transaction.IDealTransaction()
             {
+                ShopID = 149631,
                 Amount = 2000,
                 Bank = "ABNAL2A",
                 Description = "Testing 1. 2.",

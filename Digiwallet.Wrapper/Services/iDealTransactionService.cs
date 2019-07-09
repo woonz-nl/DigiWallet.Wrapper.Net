@@ -39,7 +39,7 @@ namespace Digiwallet.Wrapper.Services
             var content = new FormUrlEncodedContent( new Dictionary<string, string>
             {
                 { "ver", "4" },
-                { "rtlo", "149631"},
+                { "rtlo", transaction.ShopID.ToString()},
                 { "bank", transaction.Bank},
                 { "amount", transaction.Amount.ToString()},
                 { "description", transaction.Description},
