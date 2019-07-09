@@ -1,5 +1,6 @@
 ﻿using Digiwallet.Wrapper.Models.TransactionStatus;
 using Digiwallet.Wrapper.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -11,10 +12,12 @@ namespace Digiwallet.Wrapper.Services
     public class TransactionStatusService : ITransactionStatusService
     {
         private readonly IHttpClientFactory _clientFactory;
-        public TransactionStatusService(/*IOptions<DigiwalletSettings> digiwalletSettings, */ IHttpClientFactory clientFactory)
+        private readonly ILogger<TransactionStatusService> _logger; 
+        public TransactionStatusService(/*IOptions<DigiwalletSettings> digiwalletSettings, */ IHttpClientFactory clientFactory, ILogger<TransactionStatusService> logger)
         {
             // this._settings = digiwalletSettings.Value;
             _clientFactory = clientFactory;
+            _logger = logger;
         }
 
         /// <summary>
@@ -50,8 +53,12 @@ namespace Digiwallet.Wrapper.Services
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();
 
+                _logger.LogInformation(string.Format("Got API response: {0}", apiResponse));
+
                 return new TransactionStatusResponseModel(apiResponse);
             }
+
+            _logger.LogWarning(string.Format("API Returned statuscode other than succes. ({0}, {1})", response.StatusCode, response.ReasonPhrase));
 
             // Custom errors here: 
             throw new Exception("Failed to get response from API");
