@@ -7,8 +7,9 @@ using Digiwallet.Wrapper.Services;
 using Digiwallet.Wrapper.Services.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+using Microsoft.Extensions.Logging;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,13 +30,13 @@ namespace Digiwallet.Wrapper.Cmd
             var issuerRepo = serviceProvider.GetService<IIDealIssuerRepository>();
             var iDealTransactionService = serviceProvider.GetService<IIDealTransactionService>();
             var transactionStatusService = serviceProvider.GetService<ITransactionStatusService>();
+            var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
 
+            logger.LogDebug("GETTING ISSUERS");
             var issuers = await issuerRepo.GetIssuers();
 
-            foreach (var issuer in issuers)
-            {
-                Console.WriteLine(string.Format("ID: {0}, Name: {1}", issuer.Id, issuer.BankName));
-            }
+            logger.LogDebug(string.Format("Found {0} issuers", issuers.Count()));
+            logger.LogDebug(string.Join("\n", issuers.Select(issuer => string.Format("ID: {0}, Name: {1}", issuer.Id, issuer.BankName))));
 
             var result = await iDealTransactionService.StartTransaction(new Models.Transaction.IDealTransaction()
             {
@@ -48,9 +49,8 @@ namespace Digiwallet.Wrapper.Cmd
                 ReportUrl = "http://development.woonz.nl/DigiWallet/report"
             });
 
-            Console.WriteLine(string.Format("== Transaction response ===\nStatuscode: {0}\nStatus enum: {1}\nResponse body {2}", result.StatusCode, result.Status, result.ResponseBody));
-
-            Console.WriteLine(result.OutboundUrl);
+            logger.LogDebug(string.Format("== Transaction response ===\nStatuscode: {0}\nStatus enum: {1}\nResponse body {2}", result.StatusCode, result.Status, result.ResponseBody));
+            logger.LogDebug($"Outbound URL: {result.OutboundUrl}");
 
             if (result.Status == StartTransactionResponseCodes.Started)
             {
@@ -62,18 +62,18 @@ namespace Digiwallet.Wrapper.Cmd
                     TestMode = true
                 };
 
-                Console.WriteLine("Started transaction check loop, press ctrl + c to quit");
+                logger.LogDebug("Started transaction check loop, press ctrl + c to quit");
 
                 while (true)
                 {
                     var currentStatus = await transactionStatusService.CheckTransaction(checkModel);
-                    Console.WriteLine(string.Format("== Current Status ===\nStatuscode: {0}\nStatus enum: {1}\nResponse body {2}", currentStatus.StatusCode, currentStatus.Status, currentStatus.ResponseBody));
+                    logger.LogInformation(string.Format("== Current Status ===\nStatuscode: {0}\nStatus enum: {1}\nResponse body {2}", currentStatus.StatusCode, currentStatus.Status, currentStatus.ResponseBody));
                     Thread.Sleep(10000);
                 }
             }
             else
             {
-                Console.WriteLine("Failed to start transaction");
+                logger.LogWarning("Failed to start transaction");
             }
         }
 
@@ -97,6 +97,10 @@ namespace Digiwallet.Wrapper.Cmd
                 .AddDigiWalletServices()
                 .AddOptions()
                 .AddSingleton<IIDealTransactionService, IDealTransactionService>()
+                .AddLogging(builder => builder
+                    .AddConsole()
+                    .AddFilter(level => level >= LogLevel.Debug)
+                )
                 // Maps the Digiwallet config options to the settings model, and adds it for injection. 
                 // Since none of the settings are currently in use, this has been commented out.
                 //.Configure<DigiwalletSettings>(options => {
