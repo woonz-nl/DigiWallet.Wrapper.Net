@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace Digiwallet.Wrapper.Services
 {
@@ -16,10 +17,12 @@ namespace Digiwallet.Wrapper.Services
     {
         // private readonly DigiwalletSettings _settings;
         private readonly IHttpClientFactory _clientFactory;
-        public IDealTransactionService(/*IOptions<DigiwalletSettings> digiwalletSettings, */ IHttpClientFactory clientFactory)
+        private readonly ILogger<IDealTransactionService> _logger;
+        public IDealTransactionService(/*IOptions<DigiwalletSettings> digiwalletSettings, */ IHttpClientFactory clientFactory, ILogger<IDealTransactionService> logger)
         {
             // this._settings = digiwalletSettings.Value;
             _clientFactory = clientFactory;
+            _logger = logger;
         }
 
         /// <summary>
@@ -56,9 +59,12 @@ namespace Digiwallet.Wrapper.Services
             if (response.IsSuccessStatusCode)
             {
                 var apiResponse = await response.Content.ReadAsStringAsync();
+                _logger.LogInformation(string.Format("Got API response: {0}", apiResponse));
 
                 return new StartTransactionResponse(apiResponse);
             }
+
+            _logger.LogWarning(string.Format("API Returned statuscode other than succes. ({0}, {1})", response.StatusCode, response.ReasonPhrase));
 
             // Custom errors here: 
             throw new Exception("Failed to get response from API");
