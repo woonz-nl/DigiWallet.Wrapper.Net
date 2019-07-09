@@ -1,4 +1,6 @@
 ﻿using Digiwallet.Wrapper.Extensions;
+using Digiwallet.Wrapper.Models.Responses;
+using Digiwallet.Wrapper.Models.TransactionStatus;
 using Digiwallet.Wrapper.Repositories;
 using Digiwallet.Wrapper.Repositories.Interfaces;
 using Digiwallet.Wrapper.Services;
@@ -7,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Digiwallet.Wrapper.Cmd
@@ -25,6 +28,7 @@ namespace Digiwallet.Wrapper.Cmd
 
             var issuerRepo = serviceProvider.GetService<IIDealIssuerRepository>();
             var iDealTransactionService = serviceProvider.GetService<IIDealTransactionService>();
+            var transactionStatusService = serviceProvider.GetService<ITransactionStatusService>();
 
             var issuers = await issuerRepo.GetIssuers();
 
@@ -44,6 +48,32 @@ namespace Digiwallet.Wrapper.Cmd
             });
 
             Console.WriteLine(string.Format("== Transaction response ===\nStatuscode: {0}\nStatus enum: {1}\nResponse body {2}", result.StatusCode, result.Status, result.ResponseBody));
+
+            Console.WriteLine(result.OutboundUrl);
+
+            if (result.Status == StartTransactionResponseCodes.Started)
+            {
+                var checkModel = new TransactionStatusRequestModel() {
+                    ApiEndpoint = "ideal/check",
+                    ShopID = 149631,
+                    TransactionID = result.TransactionNr,
+                    RestrictResponseCount = true, 
+                    TestMode = true
+                };
+
+                Console.WriteLine("Started transaction check loop, press ctrl + c to quit");
+
+                while (true)
+                {
+                    var currentStatus = await transactionStatusService.CheckTransaction(checkModel);
+                    Console.WriteLine(string.Format("== Current Status ===\nStatuscode: {0}\nStatus enum: {1}\nResponse body {2}", currentStatus.StatusCode, currentStatus.Status, currentStatus.ResponseBody));
+                    Thread.Sleep(10000);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Failed to start transaction");
+            }
         }
 
         public static IConfigurationRoot GetConfigurationBuilder()
@@ -62,6 +92,7 @@ namespace Digiwallet.Wrapper.Cmd
         {
             var serviceProvider = new ServiceCollection()
                 .AddSingleton<IIDealIssuerRepository, IDealIssuerRepository>()
+                .AddSingleton<ITransactionStatusService, TransactionStatusService>()
                 .AddDigiWalletServices()
                 .AddOptions()
                 .AddSingleton<IIDealTransactionService, IDealTransactionService>()
