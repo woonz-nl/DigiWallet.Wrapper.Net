@@ -1,5 +1,6 @@
 ﻿using Digiwallet.Wrapper.Models.iDeal;
 using Digiwallet.Wrapper.Repositories.Interfaces;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -14,10 +15,12 @@ namespace Digiwallet.Wrapper.Repositories
     public class IDealIssuerRepository : IIDealIssuerRepository
     {
         private readonly IHttpClientFactory _clientFactory;
+        private readonly ILogger<IDealIssuerRepository> _logger;
 
-        public IDealIssuerRepository(IHttpClientFactory clientFactory)
+        public IDealIssuerRepository(IHttpClientFactory clientFactory, ILogger<IDealIssuerRepository> logger)
         {
             _clientFactory = clientFactory;
+            _logger = logger;
         }
 
         /// <summary>
@@ -43,6 +46,7 @@ namespace Digiwallet.Wrapper.Repositories
                 return result.Issuers;
             }
 
+            _logger.LogWarning(string.Format("API Returned statuscode other than succes. ({0}, {1})", response.StatusCode, response.ReasonPhrase));
             return new List<IDealIssuerModel>() { new IDealIssuerModel() };
         }
     }
