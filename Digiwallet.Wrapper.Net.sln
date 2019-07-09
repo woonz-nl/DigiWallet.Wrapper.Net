@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digiwallet.Wrapper", "Digiw
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digiwallet.Wrapper.Cmd", "Digiwallet.Wrapper.Cmd\Digiwallet.Wrapper.Cmd.csproj", "{23BEF7B0-75DF-4771-99D1-1016ED98F662}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Digiwallet.Wrapper.Tests", "Digiwallet.Wrapper.Tests\Digiwallet.Wrapper.Tests.csproj", "{03A939D6-DF10-4B9F-A799-7352B1ED191D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{23BEF7B0-75DF-4771-99D1-1016ED98F662}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23BEF7B0-75DF-4771-99D1-1016ED98F662}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23BEF7B0-75DF-4771-99D1-1016ED98F662}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03A939D6-DF10-4B9F-A799-7352B1ED191D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03A939D6-DF10-4B9F-A799-7352B1ED191D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03A939D6-DF10-4B9F-A799-7352B1ED191D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03A939D6-DF10-4B9F-A799-7352B1ED191D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
