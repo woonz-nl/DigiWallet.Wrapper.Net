@@ -31,6 +31,7 @@ namespace Digiwallet.Wrapper.Services
                 { "ver", "4" },
                 { "rtlo", requestModel.ShopID.ToString()},
                 { "trxid", requestModel.TransactionID.ToString()},
+                { "app_id", "woonz.digiwalletwrapper in-dev"}, // Maybe get release version from NuGet build later on. 
                 { "test", requestModel.TestMode ? "1" : "0"},
                 { "once", requestModel.RestrictResponseCount ? "1" : "0"},
             });

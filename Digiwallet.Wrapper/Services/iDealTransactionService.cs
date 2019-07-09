@@ -41,6 +41,7 @@ namespace Digiwallet.Wrapper.Services
                 { "ver", "4" },
                 { "rtlo", transaction.ShopID.ToString()},
                 { "bank", transaction.Bank},
+                { "app_id", "woonz.digiwalletwrapper in-dev"}, // Maybe get release version from NuGet build later on. 
                 { "amount", transaction.Amount.ToString()},
                 { "description", transaction.Description},
                 { "reporturl", transaction.ReportUrl},
