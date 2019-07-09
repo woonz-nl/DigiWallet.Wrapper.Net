@@ -1,4 +1,7 @@
 ﻿
+using System;
+using System.Linq;
+
 namespace Digiwallet.Wrapper.Models.Transaction
 {
     public abstract class TransactionBase
@@ -59,11 +62,27 @@ namespace Digiwallet.Wrapper.Models.Transaction
                 this._amount = value;
             }
         }
+        private string _description;
         /// <summary>
         /// Description of what's being paid for. 
-        /// TODO: Define max length. 
         /// </summary>
-        public string Description { get; set; }
+        public string Description
+        {
+            get
+            {
+                return _description;
+            }
+            set
+            {
+                // Alternative for using Regex 
+                // https://stackoverflow.com/a/3210462
+                char[] arr = value.ToCharArray();
+                arr = Array.FindAll(arr,
+                            c => char.IsLetterOrDigit(c) ||
+                            char.IsWhiteSpace(c)).Take(32).ToArray();
+                _description = new string(arr);
+            }
+        }
         /// <summary>
         /// Currency used for transaction. 
         /// </summary>
