@@ -17,6 +17,13 @@ namespace Digiwallet.Wrapper.Services
             _clientFactory = clientFactory;
         }
 
+        /// <summary>
+        /// Checks transaction state with DigiWallet. This functionality is the same for every transaction provider. 
+        /// Currently, you need to set the API endpoints manually in the <see cref="TransactionStatusRequestModel"/>. 
+        /// Make sure they match the values in the <see cref="Models.Transaction.TransactionBase.CheckApi"/> implementation value. 
+        /// </summary>
+        /// <param name="requestModel"></param>
+        /// <returns></returns>
         public async Task<TransactionStatusResponseModel> CheckTransaction(TransactionStatusRequestModel requestModel)
         {
             var client = this._clientFactory.CreateClient("digiwallet");
