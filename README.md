@@ -39,7 +39,7 @@ var result = await iDealTransactionService.StartTransaction(new Models.Transacti
     ReportUrl = "http://example.com/DigiWallet/report"
 });
 ```
-The function returns a `StartTransactionResponse` model. See it's documentation for usage. 
+The function returns a [StartTransactionResponse](/Digiwallet.Wrapper/Models/Responses/StartTransactionResponse.cs) model. See it's documentation for usage. 
 
 ## Transaction status
 In order to check the transaction status you need to add the status service your startup.cs.
@@ -72,4 +72,4 @@ Call for a transaction status using;
 var currentStatus = await transactionStatusService.CheckTransaction(checkModel);
 ```
 
-This returns a `TransacionStatusResponseModel`. See it's documentation for further use. 
+This returns a [TransacionStatusResponseModel](/Digiwallet.Wrapper/Models/TransactionStatus/TransactionStatusResponseModel.cs). See it's documentation for further use. 
