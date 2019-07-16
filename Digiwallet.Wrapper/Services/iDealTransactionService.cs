@@ -1,24 +1,21 @@
-﻿using Digiwallet.Wrapper.Models;
-using Digiwallet.Wrapper.Models.Responses;
+﻿using Digiwallet.Wrapper.Models.Responses;
 using Digiwallet.Wrapper.Models.Transaction;
 using Digiwallet.Wrapper.Services.Interfaces;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.WebUtilities;
+using Digiwallet.Wrapper.Util;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Microsoft.Extensions.Logging;
 
 namespace Digiwallet.Wrapper.Services
 {
-    public class IDealTransactionService : IIDealTransactionService
+    public class IDealTransactionService : DigiwalletApiBase, IIDealTransactionService
     {
         // private readonly DigiwalletSettings _settings;
         private readonly IHttpClientFactory _clientFactory;
         private readonly ILogger<IDealTransactionService> _logger;
-        public IDealTransactionService(/*IOptions<DigiwalletSettings> digiwalletSettings, */ IHttpClientFactory clientFactory, ILogger<IDealTransactionService> logger)
+        public IDealTransactionService(/*IOptions<DigiwalletSettings> digiwalletSettings, */ IHttpClientFactory clientFactory, ILogger<IDealTransactionService> logger) : base(clientFactory, logger)
         {
             // this._settings = digiwalletSettings.Value;
             _clientFactory = clientFactory;
@@ -32,19 +29,10 @@ namespace Digiwallet.Wrapper.Services
         /// <returns>Model holding details on start of transaction. </returns>
         public async Task<StartTransactionResponse> StartTransaction(IDealTransaction transaction)
         {
-            var client = this._clientFactory.CreateClient("digiwallet");
-
-            var builder = new UriBuilder(client.BaseAddress)
+            var response = await this.ApiPost(transaction.StartApi, new Dictionary<string, string>
             {
-                Path = transaction.StartApi
-            };
-
-            var content = new FormUrlEncodedContent( new Dictionary<string, string>
-            {
-                { "ver", "4" },
                 { "rtlo", transaction.ShopID.ToString()},
                 { "bank", transaction.Bank},
-                { "app_id", "woonz.digiwalletwrapper in-dev"}, // Maybe get release version from NuGet build later on. 
                 { "amount", transaction.Amount.ToString()},
                 { "description", transaction.Description},
                 { "reporturl", transaction.ReportUrl},
@@ -52,9 +40,6 @@ namespace Digiwallet.Wrapper.Services
                 { "cancelurl", transaction.CancelUrl},
                 { "test", "1"}
             });
-
-            var request = new HttpRequestMessage(HttpMethod.Post, builder.Uri);
-            var response = await client.PostAsync(request.RequestUri, content);
 
             if (response.IsSuccessStatusCode)
             {

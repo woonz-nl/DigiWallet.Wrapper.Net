@@ -1,19 +1,19 @@
 ﻿using Digiwallet.Wrapper.Models.TransactionStatus;
 using Digiwallet.Wrapper.Services.Interfaces;
+using Digiwallet.Wrapper.Util;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Digiwallet.Wrapper.Services
 {
-    public class TransactionStatusService : ITransactionStatusService
+    public class TransactionStatusService : DigiwalletApiBase, ITransactionStatusService
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly ILogger<TransactionStatusService> _logger; 
-        public TransactionStatusService(/*IOptions<DigiwalletSettings> digiwalletSettings, */ IHttpClientFactory clientFactory, ILogger<TransactionStatusService> logger)
+        public TransactionStatusService(/*IOptions<DigiwalletSettings> digiwalletSettings, */ IHttpClientFactory clientFactory, ILogger<TransactionStatusService> logger) : base(clientFactory, logger)
         {
             // this._settings = digiwalletSettings.Value;
             _clientFactory = clientFactory;
@@ -29,25 +29,13 @@ namespace Digiwallet.Wrapper.Services
         /// <returns></returns>
         public async Task<TransactionStatusResponseModel> CheckTransaction(TransactionStatusRequestModel requestModel)
         {
-            var client = this._clientFactory.CreateClient("digiwallet");
-
-            var builder = new UriBuilder(client.BaseAddress)
+            var response = await this.ApiPost(requestModel.ApiEndpoint, new Dictionary<string, string>
             {
-                Path = requestModel.ApiEndpoint
-            };
-
-            var content = new FormUrlEncodedContent(new Dictionary<string, string>
-            {
-                { "ver", "4" },
                 { "rtlo", requestModel.ShopID.ToString()},
                 { "trxid", requestModel.TransactionID.ToString()},
-                { "app_id", "woonz.digiwalletwrapper in-dev"}, // Maybe get release version from NuGet build later on. 
                 { "test", requestModel.TestMode ? "1" : "0"},
-                { "once", requestModel.RestrictResponseCount ? "1" : "0"},
+                { "once", requestModel.RestrictResponseCount ? "1" : "0"}
             });
-
-            var request = new HttpRequestMessage(HttpMethod.Post, builder.Uri);
-            var response = await client.PostAsync(request.RequestUri, content);
 
             if (response.IsSuccessStatusCode)
             {
