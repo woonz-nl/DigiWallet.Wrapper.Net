@@ -21,6 +21,7 @@ namespace Digiwallet.Wrapper.Tests.ApiResponseModels
             // Assert
             Assert.AreEqual(StartTransactionResponseCodes.Started, model.Status, "Didn't find Started statuscode");
             Assert.AreEqual(183521787, model.TransactionNr, "Didn't parse transactionnr correctly");
+            Assert.AreEqual("https://pay.digiwallet.nl/test-transaction?transactionID=183521787&paymethod=IDE&hash=c74ed1eef8ddae675ad2d27d554e6bee491f7ddb2b349f48296983e7c484cd7b", model.OutboundUrl, "Didn't set outbound URL");
             Assert.AreEqual("000000", model.StatusCode, "Didn't correctly map API statuscode to string");
             Assert.IsNull(model.ResponseBody, "Responsebody should not be set in success case.");
         }

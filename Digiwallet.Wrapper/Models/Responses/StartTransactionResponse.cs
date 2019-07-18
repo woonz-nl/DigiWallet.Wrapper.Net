@@ -25,7 +25,7 @@ namespace Digiwallet.Wrapper.Models.Responses
         /// </summary>
         public readonly string OutboundUrl;
         /// <summary>
-        /// The raw response body as returned by the API. Holds a JSON error array in case of a failure, a return URL in case of succes. 
+        /// The response body (following the statuscode and pipe) as returned by the API. Holds a JSON error array in case of a failure, a return URL in case of succes. 
         /// Please use only for logging / development. 
         /// </summary>
         public readonly string ResponseBody;
@@ -40,6 +40,7 @@ namespace Digiwallet.Wrapper.Models.Responses
             this.Status = this.ResponseFromString(splitStatus[0]);
             if (this.Status == StartTransactionResponseCodes.Started)
             {
+                this.OutboundUrl = splitResponse[1];
                 this.TransactionNr = Int32.Parse(splitStatus[1]);
             }
             else
