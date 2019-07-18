@@ -12,7 +12,7 @@ namespace Digiwallet.Wrapper.Repositories
     /// Implementation of the issuer repository. 
     /// For now, it consumes a HttpClientFactory itself (See HttpClient defined in <see cref="Extensions.IServiceCollectionExtension"/>)
     /// </summary>
-    public class IDealIssuerRepository : IIDealIssuerRepository
+    public sealed class IDealIssuerRepository : IIDealIssuerRepository
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly ILogger<IDealIssuerRepository> _logger;

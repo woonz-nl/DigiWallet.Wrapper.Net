@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Linq;
 
 namespace Digiwallet.Wrapper.Models.Transaction

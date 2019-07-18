@@ -4,7 +4,7 @@ namespace Digiwallet.Wrapper.Models.Transaction
     /// <summary>
     /// Model that holds all details required to start a DigiWallet IDeal transaction.
     /// </summary>
-    public class IDealTransaction : TransactionBase
+    public sealed class IDealTransaction : TransactionBase
     {
         #region Provider properties
         public override string Name { get => "iDeal"; }

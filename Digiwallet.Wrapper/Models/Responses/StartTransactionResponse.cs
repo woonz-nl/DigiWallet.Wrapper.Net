@@ -6,29 +6,29 @@ namespace Digiwallet.Wrapper.Models.Responses
     /// <summary>
     /// This class models the API response that follows the starting of a transaction. 
     /// </summary>
-    public class StartTransactionResponse
+    public sealed class StartTransactionResponse
     {
         /// <summary>
         /// Status code as returned by the API. See Digiwallet site for further documentation. 
         /// </summary>
-        public string StatusCode;
+        public readonly string StatusCode;
         /// <summary>
         /// Status code as mapped to an Enum. Please use this for readability. 
         /// </summary>
-        public StartTransactionResponseCodes Status;
+        public readonly StartTransactionResponseCodes Status;
         /// <summary>
         /// Transaction nr. Save this to a database for futurue refference. 
         /// </summary>
-        public int TransactionNr;
+        public readonly int TransactionNr;
         /// <summary>
         /// If set, outbound URL for a transaction. Send the user here. 
         /// </summary>
-        public string OutboundUrl;
+        public readonly string OutboundUrl;
         /// <summary>
         /// The raw response body as returned by the API. Holds a JSON error array in case of a failure, a return URL in case of succes. 
         /// Please use only for logging / development. 
         /// </summary>
-        public string ResponseBody;
+        public readonly string ResponseBody;
 
         public StartTransactionResponse(string response)
         {

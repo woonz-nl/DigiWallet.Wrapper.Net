@@ -1,6 +1,6 @@
 ﻿namespace Digiwallet.Wrapper.Models.TransactionStatus
 {
-    public class TransactionStatusRequestModel
+    public sealed class TransactionStatusRequestModel
     {
         /// <summary>
         /// Check API endpoint. See <see cref="Models.Transaction.TransactionBase.CheckApi"/> implementations. 

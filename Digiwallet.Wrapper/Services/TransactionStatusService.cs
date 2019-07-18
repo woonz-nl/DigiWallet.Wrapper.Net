@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Digiwallet.Wrapper.Services
 {
-    public class TransactionStatusService : DigiwalletApiBase, ITransactionStatusService
+    public sealed class TransactionStatusService : DigiwalletApiBase, ITransactionStatusService
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly ILogger<TransactionStatusService> _logger; 

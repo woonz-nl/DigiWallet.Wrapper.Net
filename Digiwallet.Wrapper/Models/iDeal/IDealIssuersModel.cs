@@ -7,7 +7,7 @@ namespace Digiwallet.Wrapper.Models.iDeal
     /// Model to hold an iDeal issuer. 
     /// </summary>
     [XmlType("issuer")]
-    public class IDealIssuerModel
+    public sealed class IDealIssuerModel
     {
         /// <summary>
         /// This ID is the ID used by DigiWallet. 
@@ -25,7 +25,7 @@ namespace Digiwallet.Wrapper.Models.iDeal
     /// This model just holds a collection of iDeal issuers. It's main purpose is XML parsing.
     /// </summary>
     [XmlRoot("issuers")]
-    public class IDealIssuersModel
+    public sealed class IDealIssuersModel
     {
         public IDealIssuersModel()
         {

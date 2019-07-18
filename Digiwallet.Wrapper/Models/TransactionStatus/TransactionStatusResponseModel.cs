@@ -1,25 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 namespace Digiwallet.Wrapper.Models.TransactionStatus
 {
-    public class TransactionStatusResponseModel
+    public sealed class TransactionStatusResponseModel
     {
         /// <summary>
         /// Status code as returned by the API. See Digiwallet site for further documentation. 
         /// </summary>
-        public string StatusCode;
+        public readonly string StatusCode;
         /// <summary>
         /// Status code as mapped to an Enum. Please use this for readability. 
         /// </summary>
-        public TransactionStatusResponseCodes Status;
+        public readonly TransactionStatusResponseCodes Status;
         /// <summary>
         /// The raw response body as returned by the API. Holds a JSON error array in case of a failure, a return URL in case of succes. 
         /// Please use only for logging / development. 
         /// </summary>
-        public string ResponseBody;
+        public readonly string ResponseBody;
 
         public TransactionStatusResponseModel(string response) {
             var splitResponse = response.Split('|');

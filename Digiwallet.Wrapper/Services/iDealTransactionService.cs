@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Digiwallet.Wrapper.Services
 {
-    public class IDealTransactionService : DigiwalletApiBase, IIDealTransactionService
+    public sealed class IDealTransactionService : DigiwalletApiBase, IIDealTransactionService
     {
         // private readonly DigiwalletSettings _settings;
         private readonly IHttpClientFactory _clientFactory;
