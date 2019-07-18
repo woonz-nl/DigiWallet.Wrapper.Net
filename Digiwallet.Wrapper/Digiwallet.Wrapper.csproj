@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <Version>0.0.1</Version>
+    <Authors>Mies van der Lippe</Authors>
+    <Company>Woonz.nl</Company>
+    <Description>A wrapper for the Digiwallet API</Description>
+    <PackageProjectUrl>https://github.com/woonz-nl/DigiWallet.Wrapper.Net/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/woonz-nl/DigiWallet.Wrapper.Net.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>alpha</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
