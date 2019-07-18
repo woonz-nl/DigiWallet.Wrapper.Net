@@ -6,7 +6,6 @@ namespace Digiwallet.Wrapper.Models.Transaction
     public abstract class TransactionBase
     {
         #region Generic API params
-        public int Version { get; } = 4;
         public int ShopID { get; set; }
         public bool Test { get; set; }
         #endregion
@@ -52,11 +51,11 @@ namespace Digiwallet.Wrapper.Models.Transaction
             }
             set {
                 if (value < this.MinimumAmount) {
-                    // Throw exception
+                    throw new ArgumentOutOfRangeException("Given value is below acceptable threshold");
                 }
                 if (value > this.MaximumAmount)
                 {
-                    // Throw exception
+                    throw new ArgumentOutOfRangeException("Given value is above acceptable threshold");
                 }
                 this._amount = value;
             }
